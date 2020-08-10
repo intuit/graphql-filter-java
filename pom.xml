@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.intuit.graphql</groupId>
+  <artifactId>graphql-filter-java</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>graphql-filter-java</name>
+  <!-- FIXME change it to the project's website -->
+  <!--<url></url>-->
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <graphql.version>14.0</graphql.version>
+    <graphql.scalar.version>1.0</graphql.scalar.version>
+    <spring.data.version>2.0.9.RELEASE</spring.data.version>
+    <jpa.version>2.2</jpa.version>
+    <junit.version>4.11</junit.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>IDG Micro Services Nexus Snapshots</id>
+      <name>Micro Services Nexus Snapshot</name>
+      <url>http://nexus.intuit.net/nexus/content/repositories/SBG.IDG.Intuit-Snapshots/</url>
+    </repository>
+    <repository>
+      <id>IDG Micro Services Nexus Releases</id>
+      <name>Micro Services Nexus Releases</name>
+      <url>http://nexus.intuit.net/nexus/content/repositories/SBG.IDG.Intuit-Releases/</url>
+    </repository>
+  </repositories>
+  <distributionManagement>
+    <repository>
+      <id>scm.int.rel.repo</id>
+      <name>Micro Services Nexus Releases</name>
+      <url>http://nexus.intuit.net/nexus/content/repositories/SBG.QBO.Intuit-Releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>scm.dev.snap.repo</id>
+      <uniqueVersion>false</uniqueVersion>
+      <name>Micro Services Nexus Snapshots</name>
+      <url>https://nexus.intuit.net/nexus/content/repositories/SBG.QBO.Intuit-Snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.graphql-java</groupId>
+      <artifactId>graphql-java</artifactId>
+      <version>${graphql.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.graphql-java</groupId>
+      <artifactId>graphql-java-extended-scalars</artifactId>
+      <version>${graphql.scalar.version}</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>${spring.data.version}</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
+      <version>${jpa.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

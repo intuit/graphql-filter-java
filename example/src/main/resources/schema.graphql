@@ -1,0 +1,85 @@
+
+scalar Date
+scalar DateTime
+
+type Query {
+   searchEmployees(filter: EmployeeFilter): [Employee!]
+ }
+
+# Define the types
+type Employee {
+   id: ID
+   firstName: String!
+   lastName: String!
+   age: Int!
+   birthDate: DateTime!
+   address (filter: AddressFilter): [Address!]
+}
+
+type Address {
+   id: ID
+   street : String!
+   city : String!
+   state : String!
+   zipCode : Int!
+}
+
+# Define filter input
+input EmployeeFilter {
+   firstName: StringExpression
+   lastName: StringExpression
+   age: IntExpression
+   birthDate: DateTimeExpression
+
+   and: [EmployeeFilter!]
+   or: [EmployeeFilter!]
+   not: EmployeeFilter
+}
+
+input AddressFilter {
+   street : StringExpression
+   city : StringExpression
+   state : StringExpression
+   zipCode : IntExpression
+
+     and: [AddressFilter!]
+     or: [AddressFilter!]
+     not: AddressFilter
+}
+
+
+# Define String expression
+input StringExpression {
+   equals: String
+   contains: String
+   in: [String!]
+}
+
+# Define Int Expression
+input IntExpression {
+   eq: Int
+   gt: Int
+   gte: Int
+   lt: Int
+   lte: Int
+   in: [Int!]
+   between: [Int!]
+}
+
+input DateTimeExpression {
+    eq: DateTime
+    gt: DateTime
+    gte: DateTime
+    lt: DateTime
+    lte: DateTime
+    between: [DateTime!]
+}
+
+input DateExpression {
+    eq: Date
+    gt: Date
+    gte: Date
+    lt: Date
+    lte: Date
+    between: [Date!]
+}
