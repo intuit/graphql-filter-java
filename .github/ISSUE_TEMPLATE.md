@@ -1,0 +1,1 @@
+If you are sure you have found a bug, please make sure you follow contributing guidelines.
