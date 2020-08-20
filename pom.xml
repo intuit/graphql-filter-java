@@ -8,9 +8,33 @@
   <artifactId>graphql-filter-java</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>graphql-filter-java</name>
-  <!-- FIXME change it to the project's website -->
-  <!--<url></url>-->
+  <name>${project.artifactId}</name>
+  <description>A java library to transform graphql filter into database filter</description>
+  <url>https://github.com/intuit/graphql-filter-java</url>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>https://github.com/intuit/graphql-filter-java</url>
+    <connection>scm:git:git://github.com/intuit/graphql-filter-java.git</connection>
+    <developerConnection>scm:git:git@github.com:intuit/graphql-filter-java.git</developerConnection>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Saurabh Jaiswal</name>
+      <id>jaiswalsk</id>
+      <organization>Intuit, Inc.</organization>
+      <organizationUrl>http://www.intuit.com</organizationUrl>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,27 +49,15 @@
 
   <repositories>
     <repository>
-      <id>IDG Micro Services Nexus Snapshots</id>
-      <name>Micro Services Nexus Snapshot</name>
-      <url>http://nexus.intuit.net/nexus/content/repositories/SBG.IDG.Intuit-Snapshots/</url>
-    </repository>
-    <repository>
-      <id>IDG Micro Services Nexus Releases</id>
-      <name>Micro Services Nexus Releases</name>
-      <url>http://nexus.intuit.net/nexus/content/repositories/SBG.IDG.Intuit-Releases/</url>
+      <id>central</id>
+      <url>https://repo.maven.apache.org/maven2/</url>
     </repository>
   </repositories>
+
   <distributionManagement>
-    <repository>
-      <id>scm.int.rel.repo</id>
-      <name>Micro Services Nexus Releases</name>
-      <url>http://nexus.intuit.net/nexus/content/repositories/SBG.QBO.Intuit-Releases</url>
-    </repository>
     <snapshotRepository>
-      <id>scm.dev.snap.repo</id>
-      <uniqueVersion>false</uniqueVersion>
-      <name>Micro Services Nexus Snapshots</name>
-      <url>https://nexus.intuit.net/nexus/content/repositories/SBG.QBO.Intuit-Snapshots</url>
+      <id>oss-snapshot</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
