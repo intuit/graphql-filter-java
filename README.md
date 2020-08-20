@@ -1,4 +1,8 @@
 ![GraphQL-Filters](/images/GraphQL-Filters-logo.png)
+
+## Build Status
+[![Build Status](https://circleci.com/gh/intuit/graphql-filter-java.svg?style=shield&circle-token=1717f6b653f6cf149095b24a5d88a0cce52ec0bd)](https://app.circleci.com/pipelines/github/intuit/graphql-filter-java) 
+
 ## Overview
 This library helps GraphQL developers in building awesome apis with fine grain filtering support.
 
