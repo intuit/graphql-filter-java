@@ -90,16 +90,6 @@ public class SQLExpressionTest extends BaseFilterExpressionTest {
     }
 
     @Test
-    public void filterExpressionWithDate () {
-        System.out.println("Query: " + TestConstants.COMPOUND_DATE_FILTER);
-        ExecutionResult result = getGraphQL().execute(TestConstants.COMPOUND_DATE_FILTER);
-
-        String expectedExpression = "WHERE ((lastName = 'Jaiswal') OR (birthDate > 'Thu Dec 19 16:39:57 PST 1996'))";
-        System.out.println("");
-        Assert.assertEquals(expectedExpression,getEmployeeDataFetcher().getSqlExpression());
-    }
-
-    @Test
     public void filterExpressionWithOtherArgs () {
         System.out.println("Query: " + TestConstants.FILTER_WITH_OTHER_ARGS);
         ExecutionResult result = getGraphQL().execute(TestConstants.FILTER_WITH_OTHER_ARGS);
