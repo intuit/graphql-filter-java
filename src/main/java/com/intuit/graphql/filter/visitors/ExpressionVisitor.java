@@ -2,6 +2,7 @@ package com.intuit.graphql.filter.visitors;
 
 import com.intuit.graphql.filter.ast.BinaryExpression;
 import com.intuit.graphql.filter.ast.CompoundExpression;
+import com.intuit.graphql.filter.ast.UnaryExpression;
 import com.intuit.graphql.filter.ast.ExpressionField;
 import com.intuit.graphql.filter.ast.ExpressionValue;
 import com.intuit.graphql.filter.ast.Expression;
@@ -50,6 +51,18 @@ public interface ExpressionVisitor<T> {
      *          Data of processed node.
      */
     public T visitBinaryExpression(BinaryExpression binaryExpression, T data);
+
+    /**
+     * Handles the processing of unary
+     * expression node.
+     * @param unaryExpression
+     *          Contains unary expression.
+     * @param data
+     *          Buffer for storing processed data.
+     * @return
+     *          Data of processed node.
+     */
+    public T visitUnaryExpression(UnaryExpression unaryExpression, T data);
 
     /**
      * Handles the processing of expression

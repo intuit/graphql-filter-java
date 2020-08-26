@@ -2,6 +2,7 @@ package com.intuit.graphql.filter.visitors;
 
 import com.intuit.graphql.filter.ast.BinaryExpression;
 import com.intuit.graphql.filter.ast.CompoundExpression;
+import com.intuit.graphql.filter.ast.UnaryExpression;
 import com.intuit.graphql.filter.ast.Expression;
 import com.intuit.graphql.filter.ast.ExpressionField;
 import com.intuit.graphql.filter.ast.ExpressionValue;
@@ -77,6 +78,26 @@ public class InfixExpressionVisitor implements ExpressionVisitor<String> {
                         .append(")");
         return expressionBuilder.toString();
 
+    }
+
+    /**
+     * Handles the processing of unary
+     * expression node.
+     * @param unaryExpression
+     *          Contains unary expression.
+     * @param data
+     *          Buffer for storing processed data.
+     * @return
+     *          Data of processed node.
+     */
+    @Override
+    public String visitUnaryExpression(UnaryExpression unaryExpression, String data) {
+        StringBuilder expressionBuilder = new StringBuilder(data);
+        expressionBuilder.append("(")
+                .append(" ").append(unaryExpression.getOperator()).append(" ")
+                .append(unaryExpression.getLeftOperand().accept(this, ""))
+                .append(")");
+        return expressionBuilder.toString();
     }
 
     /**

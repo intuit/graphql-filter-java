@@ -2,6 +2,7 @@ package com.intuit.graphql.filter.visitors;
 
 import com.intuit.graphql.filter.ast.BinaryExpression;
 import com.intuit.graphql.filter.ast.CompoundExpression;
+import com.intuit.graphql.filter.ast.UnaryExpression;
 import com.intuit.graphql.filter.ast.Expression;
 import com.intuit.graphql.filter.ast.ExpressionField;
 import com.intuit.graphql.filter.ast.ExpressionValue;
@@ -69,9 +70,6 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
                 left = compoundExpression.getLeftOperand().accept(this, null);
                 right = compoundExpression.getRightOperand().accept(this, null);
                 result = Specification.where(left).or(right);
-                break;
-
-            case NOT:
                 break;
         }
         return result;
@@ -145,6 +143,22 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
             }
         };
         return specification;
+    }
+
+    /**
+     * Handles the processing of unary
+     * expression node.
+     * @param unaryExpression
+     *          Contains unary expression.
+     * @param data
+     *          Buffer for storing processed data.
+     * @return
+     *          Data of processed node.
+     */
+    @Override
+    public Specification<T> visitUnaryExpression(UnaryExpression unaryExpression, Specification<T> data) {
+        Specification<T> left = unaryExpression.getLeftOperand().accept(this, null);
+        return Specification.not(left);
     }
 
     /**
