@@ -7,33 +7,34 @@ package com.intuit.graphql.filter.ast;
 public enum Operator {
 
     /* Logical Operators */
-    AND("and", "Logical",  Kind.LOGICAL),
-    OR ("or", "Logical",  Kind.LOGICAL),
-    NOT ("not", "Logical", Kind.LOGICAL),
+    AND("and", "Logical",  Kind.COMPOUND),
+    OR ("or", "Logical",  Kind.COMPOUND),
+    NOT ("not", "Logical", Kind.UNARY),
 
     /* String Operators */
-    EQUALS("equals", "String", Kind.RELATIONAL),
-    CONTAINS("contains", "String",  Kind.RELATIONAL),
-    STARTS("starts", "String",  Kind.RELATIONAL),
-    ENDS("ends", "String",  Kind.RELATIONAL),
+    EQUALS("equals", "String", Kind.BINARY),
+    CONTAINS("contains", "String",  Kind.BINARY),
+    STARTS("starts", "String",  Kind.BINARY),
+    ENDS("ends", "String",  Kind.BINARY),
 
     /* Numeric Operators */
-    EQ("eq", "Numeric", Kind.RELATIONAL),
-    GT("gt", "Numeric",  Kind.RELATIONAL),
-    GTE("gte", "Numeric",  Kind.RELATIONAL),
-    LT("lt", "Numeric",  Kind.RELATIONAL),
-    LTE("lte", "Numeric",  Kind.RELATIONAL),
+    EQ("eq", "Numeric", Kind.BINARY),
+    GT("gt", "Numeric",  Kind.BINARY),
+    GTE("gte", "Numeric",  Kind.BINARY),
+    LT("lt", "Numeric",  Kind.BINARY),
+    LTE("lte", "Numeric",  Kind.BINARY),
 
     /* Range Operators */
-    IN("in", "String|Numeric",  Kind.RELATIONAL),
-    BETWEEN("between","DateTime|Numeric", Kind.RELATIONAL);
+    IN("in", "String|Numeric",  Kind.BINARY),
+    BETWEEN("between","DateTime|Numeric", Kind.BINARY);
 
     /**
      * Enum of operator kind.
      */
     enum Kind {
-        LOGICAL,
-        RELATIONAL;
+        COMPOUND,
+        BINARY,
+        UNARY;
     }
 
     private String name;

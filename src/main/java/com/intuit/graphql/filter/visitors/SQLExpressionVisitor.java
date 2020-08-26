@@ -2,11 +2,11 @@ package com.intuit.graphql.filter.visitors;
 
 import com.intuit.graphql.filter.ast.BinaryExpression;
 import com.intuit.graphql.filter.ast.CompoundExpression;
+import com.intuit.graphql.filter.ast.UnaryExpression;
 import com.intuit.graphql.filter.ast.Expression;
 import com.intuit.graphql.filter.ast.ExpressionField;
 import com.intuit.graphql.filter.ast.ExpressionValue;
 import com.intuit.graphql.filter.ast.Operator;
-import graphql.language.Field;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -84,6 +84,26 @@ public class SQLExpressionVisitor implements ExpressionVisitor<String> {
                 .append(" ").append(resolveOperator(binaryExpression.getOperator())).append(" ");
         operatorStack.push(binaryExpression.getOperator());
         expressionBuilder.append(binaryExpression.getRightOperand().accept(this, ""))
+                .append(")");
+        return expressionBuilder.toString();
+    }
+
+    /**
+     * Handles the processing of unary
+     * expression node.
+     * @param unaryExpression
+     *          Contains unary expression.
+     * @param data
+     *          Buffer for storing processed data.
+     * @return
+     *          Data of processed node.
+     */
+    @Override
+    public String visitUnaryExpression(UnaryExpression unaryExpression, String data) {
+        StringBuilder expressionBuilder = new StringBuilder(data);
+        expressionBuilder.append("(")
+                .append(" ").append(resolveOperator(unaryExpression.getOperator())).append(" ")
+                .append(unaryExpression.getLeftOperand().accept(this, ""))
                 .append(")");
         return expressionBuilder.toString();
     }

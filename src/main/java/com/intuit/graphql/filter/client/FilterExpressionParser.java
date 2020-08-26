@@ -33,12 +33,10 @@ class FilterExpressionParser {
                 switch (kind) {
 
                     /* Case to handle the compound expression.*/
-                    case "LOGICAL":
+                    case "COMPOUND":
                         List values = (List)entry.getValue();
                         for (Object o : values) {
-                            Expression operand = createExpressionTree((Map)o);
-                            expressionStack.push(operand);
-                            Expression right = expressionStack.pop();
+                            Expression right = createExpressionTree((Map)o);
                             Expression left = expressionStack.peek();
                             if (validateExpression(right) && validateExpression(left)) {
                                 left = expressionStack.pop();
@@ -52,7 +50,7 @@ class FilterExpressionParser {
                         break;
 
                     /* Case to handle the binary expression.*/
-                    case "RELATIONAL":
+                    case "BINARY":
                         BinaryExpression binaryExpression = new BinaryExpression();
                         binaryExpression.setOperator(Operator.getOperator(key));
                         List<Comparable> expressionValues = new ArrayList<>();
@@ -67,6 +65,11 @@ class FilterExpressionParser {
                         ExpressionValue<Comparable> expressionValue = new ExpressionValue(expressionValues);
                         binaryExpression.setRightOperand(expressionValue);
                         expression = binaryExpression;
+                        break;
+
+                    case "UNARY":
+                        Expression operand = createExpressionTree((Map)entry.getValue());
+                        expression = new UnaryExpression(operand,Operator.getOperator(key), null);
                         break;
                 }
             } else {
@@ -120,7 +123,9 @@ class FilterExpressionParser {
      * @return
      */
     private boolean validateExpression(Expression expression) {
-        if( expression != null && (expression instanceof BinaryExpression || expression instanceof CompoundExpression)) {
+        if (expression != null && (expression instanceof BinaryExpression
+                || expression instanceof CompoundExpression
+                || expression instanceof UnaryExpression)) {
             return true;
         }
         return false;

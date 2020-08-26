@@ -169,4 +169,37 @@ public class TestConstants {
             "    age\n" +
             "  }\n" +
             "}";
+
+    public static final String NOT_FILTER = "{\n" +
+            "  searchEmployees(filter: {\n" +
+            "      not : { firstName : {equals : \"Saurabh\"} }\n" +
+            "  }) {\n" +
+            "    firstName\n" +
+            "    lastName\n" +
+            "  }\n" +
+            "}";
+
+    public static final String NOT_COMPOUND_FILTER = "{\n" +
+            "  searchEmployees(filter: {\n" +
+            "      not : { and : [\n" +
+            "        {firstName : {equals: \"Saurabh\"}},\n" +
+            "        {lastName: {contains: \"Jaiswal\"}}\n" +
+            "      ]}\n" +
+            "  }) {\n" +
+            "    firstName\n" +
+            "    lastName\n" +
+            "  }\n" +
+            "}";
+
+    public static final String COMPOUND_NOT_FILTER = "{\n" +
+            "  searchEmployees(filter: {\n" +
+            "      and : [\n" +
+            "        {firstName : {equals: \"Saurabh\"}},\n" +
+            "        { not: {lastName: {contains: \"Jaiswal\"}}}\n" +
+            "      ]\n" +
+            "  }) {\n" +
+            "    firstName\n" +
+            "    lastName\n" +
+            "  }\n" +
+            "}";
 }

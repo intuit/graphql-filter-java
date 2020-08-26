@@ -95,12 +95,11 @@ public class InfixExpressionTest extends BaseFilterExpressionTest{
 
     @Test
     public void filterExpressionWithVariables () {
-        System.out.println("\nQuery: " + TestConstants.FILTER_WITH_VARIABLE);
         ExecutionResult result = getGraphQL().execute(TestConstants.FILTER_WITH_VARIABLE);
         String parent = getEmployeeDataFetcher().getExpression();
 
         String expectedExpression = "((firstName contains Saurabh) and (lastName equals Jaiswal))";
-        System.out.println("SQL: "+expectedExpression);
+
         Assert.assertEquals(expectedExpression,parent);
     }
 
