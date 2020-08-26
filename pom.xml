@@ -81,14 +81,12 @@
       <version>${graphql.scalar.version}</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
       <version>${spring.data.version}</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
     <dependency>
       <groupId>javax.persistence</groupId>
       <artifactId>javax.persistence-api</artifactId>

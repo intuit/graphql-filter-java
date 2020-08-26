@@ -198,6 +198,7 @@ After this step, the generated AST looks as shown below in memory.
 ### Logical
    * **AND**
    * **OR** 
+   * **NOT**
 
 ## Supported Database
 - MySQL
