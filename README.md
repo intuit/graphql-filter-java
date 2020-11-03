@@ -4,14 +4,14 @@
 [![Apache 2](http://img.shields.io/badge/license-Apache%202-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## Overview
-This library helps GraphQL developers in building awesome apis with fine grain filtering support.
+This library helps GraphQL developers build awesome APIPs with fine grain filtering support.
 
 ## Requirements
 * grahql-java (v13.x)
 * Java 8.x & Above
 
 ## Features
-This library will help in creating filter conditions which are dynamically created by combining any supported filter criteria field along with any of the supported logical operations including AND, OR and NOT.  For eg: consider the below examples.
+This library will help create filter conditions which are dynamically created by combining any supported filter criteria field along with any of the supported logical operations including AND, OR and NOT.  Consider the examples below.
 ### Queries
 
 #### OR
@@ -156,7 +156,7 @@ public class EmployeeService {
 }
 ```
 ### SQL WHERE
-Generates SQL WHERE clause which can be then directly applied to any SQL database.
+Generates SQL WHERE clause which can then be directly applied to any SQL database.
 
 ```java
 private String getExpression(DataFetchingEnvironment env) {
@@ -174,7 +174,7 @@ private String getExpression(DataFetchingEnvironment env) {
 WHERE ((lastName = 'Jaiswal') OR (firstName LIKE '%Saurabh%'))
 ```
 ## How it works?
-When graphql-java receives and parses the source filter expression, it creates an AST in memory which contains all the fields, operators and values supplied in the source filter, but the problem is
+When graphql-java receives and parses the source filter expression, it creates an AST in memory which contains all the fields, operators and values supplied in the source filter. The problem is
 the generated AST does not know about the valid rules of a correct logical expression with multiple filter criteria. In order to get a meaningful expression out of the source
 filter input, filter library parses the GraphQL generated AST and generates a new expression AST with correct syntax and semantics.
 After this step, the generated AST looks as shown below in memory.
