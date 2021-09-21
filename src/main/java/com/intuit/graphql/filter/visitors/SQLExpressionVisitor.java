@@ -162,7 +162,11 @@ public class SQLExpressionVisitor implements ExpressionVisitor<String> {
         Operator operator = operatorStack.pop();
         List<? extends Comparable> expressionValues  = value.getValues();
 
-        if (operator == Operator.CONTAINS || operator == Operator.STARTS || operator == Operator.ENDS ) {
+        if (operator == Operator.STARTS) {
+            expressionBuilder.append("'").append(expressionValues.get(0)).append("%").append("'");
+        } else if (operator == Operator.ENDS) {
+            expressionBuilder.append("'").append("%").append(expressionValues.get(0)).append("'");
+        } else if (operator == Operator.CONTAINS) {
             expressionBuilder.append("'").append("%").append(expressionValues.get(0)).append("%").append("'");
         } else if(operator == Operator.BETWEEN)  {
             expressionBuilder.append("'").append(expressionValues.get(0)).append("'")

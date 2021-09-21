@@ -220,4 +220,31 @@ public class TestConstants {
             "    lastName\n" +
             "  }\n" +
             "}";
+
+    public static final String FIRST_NAME_STARTS = "{\n" +
+            "  searchEmployees(filter: {\n" +
+            "    firstName : {starts: \"Sa\"}\n" +
+            "  }) {\n" +
+            "    firstName\n" +
+            "    lastName\n" +
+            "  }\n" +
+            "}";
+    public static final String FIRST_NAME_CONTAINS = "{\n" +
+            "  searchEmployees(filter: {\n" +
+            "    firstName : {contains: \"ura\"}\n" +
+            "  }) {\n" +
+            "    firstName\n" +
+            "    lastName\n" +
+            "  }\n" +
+            "}";
+
+    public static final String FIRST_NAME_ENDS = "{\n" +
+            "  searchEmployees(filter: {\n" +
+            "    firstName : {ends: \"bh\"}\n" +
+            "  }) {\n" +
+            "    firstName\n" +
+            "    lastName\n" +
+            "  }\n" +
+            "}";
+
 }
