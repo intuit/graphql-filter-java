@@ -105,7 +105,7 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
     @Override
     public Specification<T> visitBinaryExpression(BinaryExpression binaryExpression, Specification<T> data) {
 
-        Specification<T> specification = new Specification<T>() {
+        return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder
                                                                             criteriaBuilder) {
@@ -118,7 +118,13 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
                 switch (binaryExpression.getOperator()) {
                     /* String operations.*/
                     case STARTS:
+                        predicate = criteriaBuilder.like(path, operandValue.value() + "%");
+                        break;
+
                     case ENDS:
+                        predicate = criteriaBuilder.like(path, "%" + operandValue.value());
+                        break;
+
                     case CONTAINS:
                         predicate = criteriaBuilder.like(path, "%" + operandValue.value() + "%");
                         break;
@@ -159,7 +165,6 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
                 return predicate;
             }
         };
-        return specification;
     }
 
     /**

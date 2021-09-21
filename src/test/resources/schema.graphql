@@ -29,7 +29,9 @@ input EmployeeFilter {
 # Define String expression
 input StringExpression {
    equals: String
+   starts: String
    contains: String
+   ends: String
    in: [String!]
 }
 

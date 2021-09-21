@@ -173,4 +173,32 @@ public class SQLExpressionTest extends BaseFilterExpressionTest {
 
         Assert.assertEquals(expectedExpression,getEmployeeDataFetcher().getSqlExpression());
     }
+
+    @Test
+    public void compoundFilterExpressionWithStarts() {
+        ExecutionResult result = getGraphQL().execute(TestConstants.FIRST_NAME_STARTS);
+
+        String expectedExpression = "WHERE (empFirstName LIKE 'Sa%')";
+
+        Assert.assertEquals(expectedExpression,getEmployeeDataFetcher().getSqlExpression());
+    }
+
+    @Test
+    public void compoundFilterExpressionWithContains() {
+        ExecutionResult result = getGraphQL().execute(TestConstants.FIRST_NAME_CONTAINS);
+
+        String expectedExpression = "WHERE (empFirstName LIKE '%ura%')";
+
+        Assert.assertEquals(expectedExpression,getEmployeeDataFetcher().getSqlExpression());
+    }
+
+    @Test
+    public void compoundFilterExpressionWithEnds() {
+        ExecutionResult result = getGraphQL().execute(TestConstants.FIRST_NAME_ENDS);
+
+        String expectedExpression = "WHERE (empFirstName LIKE '%bh')";
+
+        Assert.assertEquals(expectedExpression,getEmployeeDataFetcher().getSqlExpression());
+    }
+
 }
