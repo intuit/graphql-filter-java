@@ -74,10 +74,10 @@ class FilterExpressionParser {
                         if (entry.getValue() instanceof Collection) {
                             List<Comparable> operandValues = (List<Comparable>) entry.getValue();
                             for (Comparable value : operandValues) {
-                                expressionValues.add(convertIfDate(value));
+                                expressionValues.add(value);
                             }
                         } else {
-                            expressionValues.add(convertIfDate((Comparable) entry.getValue()));
+                            expressionValues.add((Comparable) entry.getValue());
                         }
                         ExpressionValue<Comparable> expressionValue = new ExpressionValue(expressionValues);
                         binaryExpression.setRightOperand(expressionValue);
@@ -109,28 +109,6 @@ class FilterExpressionParser {
 
         }
         return operator == null ? false : true;
-    }
-
-    private Comparable convertIfDate(Comparable value) {
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof LocalDate) {
-            LocalDate localDate = (LocalDate) value;
-            value = java.util.Date.from(localDate.atStartOfDay()
-                    .atZone(ZoneId.systemDefault())
-                    .toInstant());
-        } else if (value instanceof LocalDateTime) {
-            LocalDateTime localDateTime = (LocalDateTime) value;
-            value = java.util.Date
-                    .from(localDateTime.atZone(ZoneId.systemDefault())
-                            .toInstant());
-        } else if (value instanceof OffsetDateTime) {
-            OffsetDateTime offsetDateTime = (OffsetDateTime) value;
-            value = java.util.Date
-                    .from(offsetDateTime.toInstant());
-        }
-        return value;
     }
 
     /**
