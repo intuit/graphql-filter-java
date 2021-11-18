@@ -73,13 +73,13 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>19.0</version>
+            <version>30.0-jre</version>
         </dependency>
 
         <dependency>
             <groupId>com.intuit.graphql</groupId>
             <artifactId>graphql-filter-java</artifactId>
-            <version>1.15-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>

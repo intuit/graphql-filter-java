@@ -42,9 +42,9 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <graphql.version>14.0</graphql.version>
     <graphql.scalar.version>1.0</graphql.scalar.version>
-    <spring.data.version>2.0.9.RELEASE</spring.data.version>
+    <spring.data.version>2.1.8.RELEASE</spring.data.version>
     <jpa.version>2.2</jpa.version>
-    <junit.version>4.11</junit.version>
+    <junit.version>4.13.1</junit.version>
   </properties>
 
   <distributionManagement>
