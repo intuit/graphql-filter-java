@@ -34,11 +34,13 @@ public class FilterExpression {
     private Field field;
     private Map<String,String> fieldMap;
     private Expression expressionAst;
+    private FieldValueTransformer fieldValueTransformer;
 
     private FilterExpression(FilterExpressionBuilder expressionBuilder) {
         this.field = expressionBuilder.field;
         this.fieldMap = expressionBuilder.fieldMap;
         this.expressionAst = expressionBuilder.expressionAst;
+        this.fieldValueTransformer = expressionBuilder.fieldValueTransformer;
     }
 
     /**
@@ -52,6 +54,7 @@ public class FilterExpression {
         private Expression expressionAst;
         private Map args;
         private final String FILTER_ARG = "filter";
+        private FieldValueTransformer fieldValueTransformer;
 
         private FilterExpressionBuilder () {
             fieldMap = new HashMap<>();
@@ -74,6 +77,11 @@ public class FilterExpression {
 
         public FilterExpressionBuilder args(Map filterArgs) {
             this.args = filterArgs;
+            return this;
+        }
+
+        public FilterExpressionBuilder transform(FieldValueTransformer fieldValueTransformer) {
+            this.fieldValueTransformer = fieldValueTransformer;
             return this;
         }
 
@@ -105,7 +113,7 @@ public class FilterExpression {
         if (expressionAst == null) {
             throw new InvalidFilterException("Missing or invalid filter arguments");
         }
-        ExpressionVisitor<T> expressionVisitor = ExpressionVisitorFactory.getExpressionVisitor(format, fieldMap);
+        ExpressionVisitor<T> expressionVisitor = ExpressionVisitorFactory.getExpressionVisitor(format, fieldMap, fieldValueTransformer);
         return expressionVisitor.expression(expressionAst);
     }
 }
