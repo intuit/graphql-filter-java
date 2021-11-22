@@ -21,6 +21,11 @@ import com.intuit.graphql.filter.ast.UnaryExpression;
 import com.intuit.graphql.filter.ast.Expression;
 import com.intuit.graphql.filter.ast.ExpressionField;
 import com.intuit.graphql.filter.ast.ExpressionValue;
+import com.intuit.graphql.filter.client.FieldValuePair;
+import com.intuit.graphql.filter.client.FieldValueTransformer;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 
 /**
@@ -34,9 +39,13 @@ import java.util.Map;
 public class InfixExpressionVisitor implements ExpressionVisitor<String> {
 
     private Map<String, String> fieldMap;
+    private Deque<ExpressionField> fieldStack;
+    private FieldValueTransformer fieldValueTransformer;
 
-    public InfixExpressionVisitor(Map<String,String> fieldMap) {
+    public InfixExpressionVisitor(Map<String,String> fieldMap, FieldValueTransformer fieldValueTransformer) {
         this.fieldMap = fieldMap;
+        this.fieldStack = new ArrayDeque<>();
+        this.fieldValueTransformer = fieldValueTransformer;
     }
 
     /**
@@ -132,6 +141,9 @@ public class InfixExpressionVisitor implements ExpressionVisitor<String> {
         StringBuilder expressionBuilder = new StringBuilder(data);
         if (fieldMap != null && fieldMap.get(field.infix()) != null) {
             expressionBuilder.append(fieldMap.get(field.infix()));
+        } else if (fieldValueTransformer != null && fieldValueTransformer.transformField(field.infix()) != null) {
+            expressionBuilder.append(fieldValueTransformer.transformField(field.infix()));
+            fieldStack.push(field); //pushing the field for lookup while visiting value.
         } else {
             expressionBuilder.append(field.infix());
         }
@@ -150,6 +162,14 @@ public class InfixExpressionVisitor implements ExpressionVisitor<String> {
      */
     @Override
     public String visitExpressionValue(ExpressionValue<? extends Comparable> value, String data) {
+        if (!fieldStack.isEmpty() && fieldValueTransformer != null) {
+            ExpressionField field  = fieldStack.pop(); // pop the field associated with this value.
+            FieldValuePair fieldValuePair = fieldValueTransformer.transformValue(field.infix(),value.value());
+            if (fieldValuePair != null && fieldValuePair.getValue() != null) {
+                value = new ExpressionValue(fieldValuePair.getValue());
+            }
+        }
+
         StringBuilder expressionBuilder = new StringBuilder(data);
         expressionBuilder.append(value.value());
         return expressionBuilder.toString();

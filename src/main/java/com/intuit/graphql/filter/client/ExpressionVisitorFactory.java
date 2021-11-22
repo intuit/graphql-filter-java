@@ -39,18 +39,19 @@ class ExpressionVisitorFactory {
      * @return
      */
     static ExpressionVisitor getExpressionVisitor(ExpressionFormat format,
-                                                         Map<String, String> fieldMap) {
-        ExpressionVisitor expressionVisitor = new InfixExpressionVisitor(fieldMap);
+                                                  Map<String, String> fieldMap,
+                                                  FieldValueTransformer fieldValueTransformer) {
+        ExpressionVisitor expressionVisitor = new InfixExpressionVisitor(fieldMap, fieldValueTransformer);
         if (format != null) {
             switch (format) {
                 case INFIX:
-                    expressionVisitor = new InfixExpressionVisitor(fieldMap);
+                    expressionVisitor = new InfixExpressionVisitor(fieldMap, fieldValueTransformer);
                     break;
                 case SQL:
-                    expressionVisitor =  new SQLExpressionVisitor(fieldMap);
+                    expressionVisitor =  new SQLExpressionVisitor(fieldMap, fieldValueTransformer);
                     break;
                 case JPA:
-                    expressionVisitor = new JpaSpecificationExpressionVisitor(fieldMap);
+                    expressionVisitor = new JpaSpecificationExpressionVisitor(fieldMap, fieldValueTransformer);
             }
         }
         return expressionVisitor;

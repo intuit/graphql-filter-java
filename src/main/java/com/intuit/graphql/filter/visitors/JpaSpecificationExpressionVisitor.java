@@ -21,6 +21,8 @@ import com.intuit.graphql.filter.ast.UnaryExpression;
 import com.intuit.graphql.filter.ast.Expression;
 import com.intuit.graphql.filter.ast.ExpressionField;
 import com.intuit.graphql.filter.ast.ExpressionValue;
+import com.intuit.graphql.filter.client.FieldValuePair;
+import com.intuit.graphql.filter.client.FieldValueTransformer;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,6 +30,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,9 +46,13 @@ import java.util.Map;
 public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<Specification<T>>{
 
     private Map<String, String> fieldMap;
+    private Deque<String> fieldStack;
+    private FieldValueTransformer fieldValueTransformer;
 
-    public JpaSpecificationExpressionVisitor(Map<String, String> fieldMap) {
+    public JpaSpecificationExpressionVisitor(Map<String, String> fieldMap, FieldValueTransformer fieldValueTransformer) {
         this.fieldMap = fieldMap;
+        this.fieldStack = new ArrayDeque<>();
+        this.fieldValueTransformer = fieldValueTransformer;
     }
 
     /**
@@ -113,6 +122,7 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
                 ExpressionValue<? extends Comparable> operandValue = (ExpressionValue<? extends Comparable>)binaryExpression.getRightOperand();
                 Predicate predicate = null;
                 String fieldName = mappedFieldName(binaryExpression.getLeftOperand().infix());
+                operandValue = getTransformedValue(operandValue);
                 Path path = root.get(fieldName);
 
                 switch (binaryExpression.getOperator()) {
@@ -155,11 +165,13 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
                         break;
 
                     case IN:
-                        predicate = criteriaBuilder.in(path).value(operandValue.getValues());
+                        List<Comparable> expressionInValues = (List<Comparable>)operandValue.value();
+                        predicate = criteriaBuilder.in(path).value(expressionInValues);
                         break;
 
                     case BETWEEN:
-                        predicate = criteriaBuilder.between(path,operandValue.getValues().get(0),operandValue.getValues().get(1));
+                        List<Comparable> expressionBetweenValues = (List<Comparable>)operandValue.value();
+                        predicate = criteriaBuilder.between(path,expressionBetweenValues.get(0),expressionBetweenValues.get(1));
                         break;
                 }
                 return predicate;
@@ -219,9 +231,23 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
         StringBuilder expressionBuilder = new StringBuilder();
         if (fieldMap != null && fieldMap.get(fieldName) != null) {
             expressionBuilder.append(fieldMap.get(fieldName));
+        } else if (fieldValueTransformer != null && fieldValueTransformer.transformField(fieldName) != null) {
+            expressionBuilder.append(fieldValueTransformer.transformField(fieldName));
+            fieldStack.push(fieldName); //pushing the field for lookup while visiting value.
         } else {
             expressionBuilder.append(fieldName);
         }
         return expressionBuilder.toString();
+    }
+
+    private ExpressionValue getTransformedValue(ExpressionValue<? extends Comparable> value) {
+        if (!fieldStack.isEmpty() && fieldValueTransformer != null) {
+            String field  = fieldStack.pop(); // pop the field associated with this value.
+            FieldValuePair fieldValuePair = fieldValueTransformer.transformValue(field,value.value());
+            if (fieldValuePair != null && fieldValuePair.getValue() != null) {
+                value = new ExpressionValue(fieldValuePair.getValue());
+            }
+        }
+        return value;
     }
 }

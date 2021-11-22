@@ -70,17 +70,18 @@ class FilterExpressionParser {
                     case "BINARY":
                         BinaryExpression binaryExpression = new BinaryExpression();
                         binaryExpression.setOperator(Operator.getOperator(key));
-                        List<Comparable> expressionValues = new ArrayList<>();
                         if (entry.getValue() instanceof Collection) {
+                            List<Comparable> expressionValues = new ArrayList<>();
                             List<Comparable> operandValues = (List<Comparable>) entry.getValue();
                             for (Comparable value : operandValues) {
                                 expressionValues.add(convertIfDate(value));
                             }
+                            ExpressionValue<List> expressionValue = new ExpressionValue(expressionValues);
+                            binaryExpression.setRightOperand(expressionValue);
                         } else {
-                            expressionValues.add(convertIfDate((Comparable) entry.getValue()));
+                            ExpressionValue<Comparable> expressionValue = new ExpressionValue<>(convertIfDate((Comparable) entry.getValue()));
+                            binaryExpression.setRightOperand(expressionValue);
                         }
-                        ExpressionValue<Comparable> expressionValue = new ExpressionValue(expressionValues);
-                        binaryExpression.setRightOperand(expressionValue);
                         expression = binaryExpression;
                         break;
 

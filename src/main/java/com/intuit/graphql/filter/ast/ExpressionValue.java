@@ -17,20 +17,18 @@ package com.intuit.graphql.filter.ast;
 
 import com.intuit.graphql.filter.visitors.ExpressionVisitor;
 
-import java.util.List;
-
 /**
  * Represents an expression value node
  * in the expression tree.
  *
  * @author sjaiswal
  */
-public class ExpressionValue<V extends Comparable> implements Expression {
+public class ExpressionValue<V> implements Expression {
 
-    private List<V> values;
+    private V value;
 
-    public ExpressionValue(List<V> values) {
-        this.values = values;
+    public ExpressionValue(V value) {
+        this.value = value;
     }
 
     /**
@@ -40,13 +38,20 @@ public class ExpressionValue<V extends Comparable> implements Expression {
     @Override
     public String infix() {
         StringBuilder infix = new StringBuilder("");
-        if (values != null && values.size() > 0) {
-            for (V value : values) {
-                infix.append(value.toString()).append(",");
+        String result = null;
+        if (value != null) {
+            if (value instanceof Iterable) {
+                Iterable<V> vals = (Iterable<V>) value;
+                for (V val : vals) {
+                    infix.append(value.toString()).append(",");
+                }
+                result = infix.toString() == "" ? "" : infix.substring(0, infix.length()-1);
+            } else {
+                infix.append(value);
+                result = infix.toString();
             }
-
         }
-        return infix.toString() == "" ? "" : infix.substring(0, infix.length()-1);
+        return result;
     }
 
     /**
@@ -54,11 +59,7 @@ public class ExpressionValue<V extends Comparable> implements Expression {
      * @return
      */
     public V value() {
-        return values.get(0);
-    }
-
-    public List<V> getValues() {
-        return values;
+        return value;
     }
 
     /**

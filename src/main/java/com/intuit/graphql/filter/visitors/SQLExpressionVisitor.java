@@ -22,6 +22,8 @@ import com.intuit.graphql.filter.ast.Expression;
 import com.intuit.graphql.filter.ast.ExpressionField;
 import com.intuit.graphql.filter.ast.ExpressionValue;
 import com.intuit.graphql.filter.ast.Operator;
+import com.intuit.graphql.filter.client.FieldValuePair;
+import com.intuit.graphql.filter.client.FieldValueTransformer;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -40,10 +42,14 @@ public class SQLExpressionVisitor implements ExpressionVisitor<String> {
 
     private Deque<Operator> operatorStack;
     private Map<String, String> fieldMap;
+    private Deque<ExpressionField> fieldStack;
+    private FieldValueTransformer fieldValueTransformer;
 
-    public SQLExpressionVisitor(Map<String,String> fieldMap) {
+    public SQLExpressionVisitor(Map<String,String> fieldMap, FieldValueTransformer fieldValueTransformer) {
         this.operatorStack = new ArrayDeque<>();
         this.fieldMap = fieldMap;
+        this.fieldStack = new ArrayDeque<>();
+        this.fieldValueTransformer = fieldValueTransformer;
     }
 
     /**
@@ -140,6 +146,9 @@ public class SQLExpressionVisitor implements ExpressionVisitor<String> {
         StringBuilder expressionBuilder = new StringBuilder(data);
         if (fieldMap != null && fieldMap.get(field.infix()) != null) {
             expressionBuilder.append(fieldMap.get(field.infix()));
+        } else if (fieldValueTransformer != null && fieldValueTransformer.transformField(field.infix()) != null) {
+            expressionBuilder.append(fieldValueTransformer.transformField(field.infix()));
+            fieldStack.push(field); //pushing the field for lookup while visiting value.
         } else {
             expressionBuilder.append(field.infix());
         }
@@ -160,19 +169,28 @@ public class SQLExpressionVisitor implements ExpressionVisitor<String> {
     public String visitExpressionValue(ExpressionValue<? extends Comparable> value, String data) {
         StringBuilder expressionBuilder = new StringBuilder(data);
         Operator operator = operatorStack.pop();
-        List<? extends Comparable> expressionValues  = value.getValues();
+
+        if (!fieldStack.isEmpty() && fieldValueTransformer != null) {
+            ExpressionField field  = fieldStack.pop(); // pop the field associated with this value.
+            FieldValuePair fieldValuePair = fieldValueTransformer.transformValue(field.infix(),value.value());
+            if (fieldValuePair != null && fieldValuePair.getValue() != null) {
+                value = new ExpressionValue(fieldValuePair.getValue());
+            }
+        }
 
         if (operator == Operator.STARTS) {
-            expressionBuilder.append("'").append(expressionValues.get(0)).append("%").append("'");
+            expressionBuilder.append("'").append(value.infix()).append("%").append("'");
         } else if (operator == Operator.ENDS) {
-            expressionBuilder.append("'").append("%").append(expressionValues.get(0)).append("'");
+            expressionBuilder.append("'").append("%").append(value.infix()).append("'");
         } else if (operator == Operator.CONTAINS) {
-            expressionBuilder.append("'").append("%").append(expressionValues.get(0)).append("%").append("'");
+            expressionBuilder.append("'").append("%").append(value.infix()).append("%").append("'");
         } else if(operator == Operator.BETWEEN)  {
+            List<Comparable> expressionValues = (List<Comparable>)value.value();
             expressionBuilder.append("'").append(expressionValues.get(0)).append("'")
                     .append(" AND ")
                     .append("'").append(expressionValues.get(1)).append("'");
         } else if (operator == Operator.IN) {
+            List<Comparable> expressionValues = (List<Comparable>)value.value();
             expressionBuilder.append("(");
             for (int i = 0; i < expressionValues.size(); i++) {
                 expressionBuilder.append("'").append(expressionValues.get(i)).append("'");
@@ -182,7 +200,7 @@ public class SQLExpressionVisitor implements ExpressionVisitor<String> {
             }
             expressionBuilder.append(")");
         } else {
-            expressionBuilder.append("'").append(expressionValues.get(0)).append("'");
+            expressionBuilder.append("'").append(value.infix()).append("'");
         }
         return expressionBuilder.toString();
     }
