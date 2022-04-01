@@ -72,7 +72,7 @@ type Query {
 # Define the types
 type Employee {
    firstName: String!
-   lastName: Int!
+   lastName: String!
    age: Int!
  }
   
