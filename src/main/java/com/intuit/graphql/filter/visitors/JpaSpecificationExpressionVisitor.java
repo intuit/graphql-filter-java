@@ -153,7 +153,11 @@ public class JpaSpecificationExpressionVisitor<T> implements ExpressionVisitor<S
                         break;
 
                     case EQ:
-                        predicate = criteriaBuilder.equal(path, operandValue.value());
+                        if (operandValue.value() == null) {
+                            predicate = criteriaBuilder.isNull(path);
+                        } else {
+                            predicate = criteriaBuilder.equal(path, operandValue.value());
+                        }
                         break;
 
                     case GT:
