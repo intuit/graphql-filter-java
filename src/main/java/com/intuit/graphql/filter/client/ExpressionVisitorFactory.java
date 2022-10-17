@@ -18,6 +18,7 @@ package com.intuit.graphql.filter.client;
 import com.intuit.graphql.filter.visitors.ExpressionVisitor;
 import com.intuit.graphql.filter.visitors.InfixExpressionVisitor;
 import com.intuit.graphql.filter.visitors.JpaSpecificationExpressionVisitor;
+import com.intuit.graphql.filter.visitors.MongoCriteriaExpressionVisitor;
 import com.intuit.graphql.filter.visitors.SQLExpressionVisitor;
 
 import java.util.Map;
@@ -52,6 +53,9 @@ class ExpressionVisitorFactory {
                     break;
                 case JPA:
                     expressionVisitor = new JpaSpecificationExpressionVisitor(fieldMap, fieldValueTransformer);
+                    break;
+                case MONGO:
+                    expressionVisitor =  new MongoCriteriaExpressionVisitor(fieldMap, fieldValueTransformer);
             }
         }
         return expressionVisitor;

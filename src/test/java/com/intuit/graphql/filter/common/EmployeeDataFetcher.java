@@ -20,6 +20,7 @@ import com.intuit.graphql.filter.client.FilterExpression;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class EmployeeDataFetcher {
     private String expression;
     private String sqlExpression;
     private Specification<Object> specification;
+    private Criteria mongoCriteria;
 
     public EmployeeDataFetcher() {
 
@@ -85,6 +87,21 @@ public class EmployeeDataFetcher {
         };
     }
 
+    public DataFetcher searchEmployeesMongo() {
+
+        return new DataFetcher() {
+            @Override
+            public Object get(DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
+                FilterExpression.FilterExpressionBuilder builder = FilterExpression.newFilterExpressionBuilder();
+                FilterExpression filterExpression = builder.field(dataFetchingEnvironment.getField())
+                        .args(dataFetchingEnvironment.getArguments())
+                        .build();
+                mongoCriteria = filterExpression.getExpression(ExpressionFormat.MONGO);
+                return null;
+            }
+        };
+    }
+
     public String getExpression() {
         return expression;
     }
@@ -96,4 +113,9 @@ public class EmployeeDataFetcher {
     public Specification<Object> getSpecification() {
         return specification;
     }
+
+    public Criteria getMongoCriteria() {
+        return mongoCriteria;
+    }
+
 }
