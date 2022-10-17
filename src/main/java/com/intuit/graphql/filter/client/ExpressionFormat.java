@@ -24,7 +24,8 @@ public enum ExpressionFormat {
 
     SQL("SQL"),
     INFIX("INFIX"),
-    JPA("JPA");
+    JPA("JPA"),
+    MONGO("MONGO");
 
     private String type;
     ExpressionFormat(String type) {
