@@ -121,11 +121,6 @@ class FilterExpressionParser {
             value = java.util.Date.from(localDate.atStartOfDay()
                     .atZone(ZoneId.systemDefault())
                     .toInstant());
-        } else if (value instanceof LocalDateTime) {
-            LocalDateTime localDateTime = (LocalDateTime) value;
-            value = java.util.Date
-                    .from(localDateTime.atZone(ZoneId.systemDefault())
-                            .toInstant());
         } else if (value instanceof OffsetDateTime) {
             OffsetDateTime offsetDateTime = (OffsetDateTime) value;
             value = java.util.Date
