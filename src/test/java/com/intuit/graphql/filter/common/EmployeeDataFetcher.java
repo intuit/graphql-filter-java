@@ -34,6 +34,7 @@ public class EmployeeDataFetcher {
     private String sqlExpression;
     private Specification<Object> specification;
     private Criteria mongoCriteria;
+    private org.springframework.data.elasticsearch.core.query.Criteria elasticsearchCriteria;
 
     public EmployeeDataFetcher() {
 
@@ -88,7 +89,6 @@ public class EmployeeDataFetcher {
     }
 
     public DataFetcher searchEmployeesMongo() {
-
         return new DataFetcher() {
             @Override
             public Object get(DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
@@ -97,6 +97,20 @@ public class EmployeeDataFetcher {
                         .args(dataFetchingEnvironment.getArguments())
                         .build();
                 mongoCriteria = filterExpression.getExpression(ExpressionFormat.MONGO);
+                return null;
+            }
+        };
+    }
+
+    public DataFetcher searchEmployeesElasticsearch() {
+        return new DataFetcher() {
+            @Override
+            public Object get(DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
+                FilterExpression.FilterExpressionBuilder builder = FilterExpression.newFilterExpressionBuilder();
+                FilterExpression filterExpression = builder.field(dataFetchingEnvironment.getField())
+                        .args(dataFetchingEnvironment.getArguments())
+                        .build();
+                elasticsearchCriteria = filterExpression.getExpression(ExpressionFormat.ELASTICSEARCH);
                 return null;
             }
         };
@@ -116,6 +130,10 @@ public class EmployeeDataFetcher {
 
     public Criteria getMongoCriteria() {
         return mongoCriteria;
+    }
+
+    public org.springframework.data.elasticsearch.core.query.Criteria getElasticsearchCriteria() {
+        return elasticsearchCriteria;
     }
 
 }

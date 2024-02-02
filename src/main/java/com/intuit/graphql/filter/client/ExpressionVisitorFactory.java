@@ -15,6 +15,7 @@
  */
 package com.intuit.graphql.filter.client;
 
+import com.intuit.graphql.filter.visitors.ElasticsearchCriteriaExpressionVisitor;
 import com.intuit.graphql.filter.visitors.ExpressionVisitor;
 import com.intuit.graphql.filter.visitors.InfixExpressionVisitor;
 import com.intuit.graphql.filter.visitors.JpaSpecificationExpressionVisitor;
@@ -56,6 +57,10 @@ class ExpressionVisitorFactory {
                     break;
                 case MONGO:
                     expressionVisitor =  new MongoCriteriaExpressionVisitor(fieldMap, fieldValueTransformer);
+                    break;
+                case ELASTICSEARCH:
+                    expressionVisitor = new ElasticsearchCriteriaExpressionVisitor(fieldMap, fieldValueTransformer);
+                    break;
             }
         }
         return expressionVisitor;
