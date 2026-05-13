@@ -74,6 +74,7 @@ type Employee {
    firstName: String!
    lastName: String!
    age: Int!
+   birthDate: DateTime!
  }
   
 # Define filter input
@@ -81,6 +82,7 @@ input Filter {
    firstName: StringExpression
    lastName: StringExpression
    age: IntExpression
+   birthDate: DateExpression
     
    and: [Filter!]
    or: [Filter!]
@@ -91,6 +93,9 @@ input Filter {
 input StringExpression {
    equals: String
    contains: String
+   starts: String
+   ends: String
+   in: [String!]
 }
  
 # Define Int Expression
@@ -100,6 +105,16 @@ input IntExpression {
    gte: Int
    lt: Int
    lte: Int
+   in: [Int!]
+}
+
+# Define Date Expression
+input DateExpression {
+   eq: DateTime
+   gt: DateTime
+   gte: DateTime
+   lt: DateTime
+   lte: DateTime
 }
 ```
 
@@ -173,6 +188,47 @@ private String getExpression(DataFetchingEnvironment env) {
 ```
 WHERE ((lastName = 'Jaiswal') OR (firstName LIKE '%Saurabh%'))
 ```
+
+### DynamoDB FilterExpression
+Generates a DynamoDB `FilterExpression` string along with an `ExpressionAttributeValues` map
+that can be passed directly to a DynamoDB `ScanRequest` or `QueryRequest`.
+
+```java
+private void queryDynamoDB(DataFetchingEnvironment env, DynamoDBMapper mapper) {
+    FilterExpression.FilterExpressionBuilder builder = FilterExpression.newFilterExpressionBuilder();
+    FilterExpression filterExpression = builder.field(env.getField())
+        .args(env.getArguments())
+        .build();
+
+    DynamoDBExpressionVisitor visitor = new DynamoDBExpressionVisitor(null, null);
+    String filterExpressionStr = filterExpression.getExpression(ExpressionFormat.DYNAMODB);
+    Map<String, Object> expressionValues = visitor.getExpressionValues();
+
+    // Convert expressionValues to Map<String, AttributeValue> and use with DynamoDB SDK
+}
+```
+
+#### Expression output
+```
+(contains(firstName, :firstName))
+```
+#### ExpressionAttributeValues output
+```
+{ ":firstName": "Saurabh" }
+```
+
+#### Operator mapping
+| GraphQL operator | DynamoDB expression | Parameter name |
+|-----------------|---------------------|----------------|
+| `contains` | `contains(field, :field)` | `:field` |
+| `starts` | `begins_with(field, :field)` | `:field` |
+| `equals` / `eq` | `field = :field` | `:field` |
+| `gt` | `field > :min_field` | `:min_field` |
+| `gte` | `field >= :min_field` | `:min_field` |
+| `lt` | `field < :max_field` | `:max_field` |
+| `lte` | `field <= :max_field` | `:max_field` |
+| `in` | `field IN (:field_0, :field_1, ...)` | `:field_N` |
+| `between` | `field BETWEEN :min_field AND :max_field` | `:min_field`, `:max_field` |
 ## How it works?
 When graphql-java receives and parses the source filter expression, it creates an AST in memory which contains all the fields, operators and values supplied in the source filter. The problem is
 the generated AST does not know about the valid rules of a correct logical expression with multiple filter criteria. In order to get a meaningful expression out of the source
@@ -189,6 +245,9 @@ After this step, the generated AST looks as shown below in memory.
 - Infix String
 - SQL WHERE clause
 - JPA Specification
+- MongoDB Criteria
+- Elasticsearch Criteria
+- DynamoDB FilterExpression
 
 ## Supported Operators
 ### Relational
@@ -197,10 +256,13 @@ After this step, the generated AST looks as shown below in memory.
    * **Range** (IN, BETWEEN)
 ### Logical
    * **AND**
-   * **OR** 
+   * **OR**
    * **NOT**
 
-## Supported Database
-- MySQL
+## Supported Databases
+- MySQL (via JPA Specification or SQL WHERE clause)
+- MongoDB (via Criteria)
+- Elasticsearch (via Criteria)
+- DynamoDB (via FilterExpression)
 ## Complete GraphQL JPA Example
 [GraphQL Java Filtering With JPA Specification](/example/)
