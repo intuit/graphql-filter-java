@@ -35,6 +35,7 @@ public class EmployeeDataFetcher {
     private Specification<Object> specification;
     private Criteria mongoCriteria;
     private org.springframework.data.elasticsearch.core.query.Criteria elasticsearchCriteria;
+    private String dynamoDBExpression;
 
     public EmployeeDataFetcher() {
 
@@ -134,6 +135,24 @@ public class EmployeeDataFetcher {
 
     public org.springframework.data.elasticsearch.core.query.Criteria getElasticsearchCriteria() {
         return elasticsearchCriteria;
+    }
+
+    public DataFetcher searchEmployeesDynamoDB() {
+        return new DataFetcher() {
+            @Override
+            public Object get(DataFetchingEnvironment dataFetchingEnvironment) throws Exception {
+                FilterExpression.FilterExpressionBuilder builder = FilterExpression.newFilterExpressionBuilder();
+                FilterExpression filterExpression = builder.field(dataFetchingEnvironment.getField())
+                        .args(dataFetchingEnvironment.getArguments())
+                        .build();
+                dynamoDBExpression = filterExpression.getExpression(ExpressionFormat.DYNAMODB);
+                return null;
+            }
+        };
+    }
+
+    public String getDynamoDBExpression() {
+        return dynamoDBExpression;
     }
 
 }
