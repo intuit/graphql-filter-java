@@ -15,6 +15,7 @@
  */
 package com.intuit.graphql.filter.client;
 
+import com.intuit.graphql.filter.visitors.DynamoDBExpressionVisitor;
 import com.intuit.graphql.filter.visitors.ElasticsearchCriteriaExpressionVisitor;
 import com.intuit.graphql.filter.visitors.ExpressionVisitor;
 import com.intuit.graphql.filter.visitors.InfixExpressionVisitor;
@@ -60,6 +61,9 @@ class ExpressionVisitorFactory {
                     break;
                 case ELASTICSEARCH:
                     expressionVisitor = new ElasticsearchCriteriaExpressionVisitor(fieldMap, fieldValueTransformer);
+                    break;
+                case DYNAMODB:
+                    expressionVisitor = new DynamoDBExpressionVisitor(fieldMap, fieldValueTransformer);
                     break;
             }
         }

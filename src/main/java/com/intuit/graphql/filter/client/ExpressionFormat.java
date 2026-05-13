@@ -26,7 +26,8 @@ public enum ExpressionFormat {
     INFIX("INFIX"),
     JPA("JPA"),
     MONGO("MONGO"),
-    ELASTICSEARCH("ELASTICSEARCH");
+    ELASTICSEARCH("ELASTICSEARCH"),
+    DYNAMODB("DYNAMODB");
 
     private String type;
     ExpressionFormat(String type) {
