@@ -252,10 +252,14 @@ public class DynamoDBExpressionVisitor implements ExpressionVisitor<String> {
     private String deriveValueParameterName(Operator operator, String fieldName) {
         switch (operator) {
             case GT:
+            case AFTER:
             case GTE:
+            case ON_OR_AFTER:
                 return ":min_" + fieldName;
             case LT:
+            case BEFORE:
             case LTE:
+            case ON_OR_BEFORE:
                 return ":max_" + fieldName;
             default:
                 return ":" + fieldName;
@@ -273,15 +277,20 @@ public class DynamoDBExpressionVisitor implements ExpressionVisitor<String> {
             case STARTS:
                 return "begins_with";
             case LT:
+            case BEFORE:
                 return "<";
             case GT:
+            case AFTER:
                 return ">";
             case EQ:
             case EQUALS:
+            case ON:
                 return "=";
             case GTE:
+            case ON_OR_AFTER:
                 return ">=";
             case LTE:
+            case ON_OR_BEFORE:
                 return "<=";
             case IN:
                 return "IN";

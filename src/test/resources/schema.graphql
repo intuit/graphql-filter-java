@@ -51,4 +51,9 @@ input DateExpression {
     gte: DateTime
     lt: DateTime
     lte: DateTime
+    after: DateTime
+    before: DateTime
+    onOrAfter: DateTime
+    onOrBefore: DateTime
+    on: DateTime
 }

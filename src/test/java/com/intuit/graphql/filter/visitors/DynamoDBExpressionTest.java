@@ -190,4 +190,49 @@ public class DynamoDBExpressionTest extends BaseFilterExpressionTest {
 
         Assert.assertEquals(expectedExpression, getEmployeeDataFetcher().getDynamoDBExpression());
     }
+
+    @Test
+    public void filterExpressionWithAfter() {
+        getGraphQL().execute(TestConstants.BIRTH_DATE_AFTER);
+
+        String expectedExpression = "(birthDate > :min_birthDate)";
+
+        Assert.assertEquals(expectedExpression, getEmployeeDataFetcher().getDynamoDBExpression());
+    }
+
+    @Test
+    public void filterExpressionWithBefore() {
+        getGraphQL().execute(TestConstants.BIRTH_DATE_BEFORE);
+
+        String expectedExpression = "(birthDate < :max_birthDate)";
+
+        Assert.assertEquals(expectedExpression, getEmployeeDataFetcher().getDynamoDBExpression());
+    }
+
+    @Test
+    public void filterExpressionWithOnOrAfter() {
+        getGraphQL().execute(TestConstants.BIRTH_DATE_ON_OR_AFTER);
+
+        String expectedExpression = "(birthDate >= :min_birthDate)";
+
+        Assert.assertEquals(expectedExpression, getEmployeeDataFetcher().getDynamoDBExpression());
+    }
+
+    @Test
+    public void filterExpressionWithOnOrBefore() {
+        getGraphQL().execute(TestConstants.BIRTH_DATE_ON_OR_BEFORE);
+
+        String expectedExpression = "(birthDate <= :max_birthDate)";
+
+        Assert.assertEquals(expectedExpression, getEmployeeDataFetcher().getDynamoDBExpression());
+    }
+
+    @Test
+    public void filterExpressionWithOn() {
+        getGraphQL().execute(TestConstants.BIRTH_DATE_ON);
+
+        String expectedExpression = "(birthDate = :birthDate)";
+
+        Assert.assertEquals(expectedExpression, getEmployeeDataFetcher().getDynamoDBExpression());
+    }
 }

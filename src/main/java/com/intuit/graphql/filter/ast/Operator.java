@@ -43,7 +43,14 @@ public enum Operator {
 
     /* Range Operators */
     IN("in", "String|Numeric",  Kind.BINARY),
-    BETWEEN("between","DateTime|Numeric", Kind.BINARY);
+    BETWEEN("between","DateTime|Numeric", Kind.BINARY),
+
+    /* Date Operators */
+    AFTER("after", "DateTime|Date", Kind.BINARY),
+    BEFORE("before", "DateTime|Date", Kind.BINARY),
+    ON_OR_AFTER("onOrAfter", "DateTime|Date", Kind.BINARY),
+    ON_OR_BEFORE("onOrBefore", "DateTime|Date", Kind.BINARY),
+    ON("on", "DateTime|Date", Kind.BINARY);
 
     /**
      * Enum of operator kind.
