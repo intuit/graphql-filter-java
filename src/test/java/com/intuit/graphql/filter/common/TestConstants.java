@@ -247,49 +247,4 @@ public class TestConstants {
             "  }\n" +
             "}";
 
-    public static final String BIRTH_DATE_AFTER = "{\n" +
-            "  searchEmployees(filter: {\n" +
-            "    birthDate : {after: \"1990-01-01T00:00:00Z\"}\n" +
-            "  }) {\n" +
-            "    firstName\n" +
-            "    lastName\n" +
-            "  }\n" +
-            "}";
-
-    public static final String BIRTH_DATE_BEFORE = "{\n" +
-            "  searchEmployees(filter: {\n" +
-            "    birthDate : {before: \"2000-01-01T00:00:00Z\"}\n" +
-            "  }) {\n" +
-            "    firstName\n" +
-            "    lastName\n" +
-            "  }\n" +
-            "}";
-
-    public static final String BIRTH_DATE_ON_OR_AFTER = "{\n" +
-            "  searchEmployees(filter: {\n" +
-            "    birthDate : {onOrAfter: \"1990-01-01T00:00:00Z\"}\n" +
-            "  }) {\n" +
-            "    firstName\n" +
-            "    lastName\n" +
-            "  }\n" +
-            "}";
-
-    public static final String BIRTH_DATE_ON_OR_BEFORE = "{\n" +
-            "  searchEmployees(filter: {\n" +
-            "    birthDate : {onOrBefore: \"2000-01-01T00:00:00Z\"}\n" +
-            "  }) {\n" +
-            "    firstName\n" +
-            "    lastName\n" +
-            "  }\n" +
-            "}";
-
-    public static final String BIRTH_DATE_ON = "{\n" +
-            "  searchEmployees(filter: {\n" +
-            "    birthDate : {on: \"1995-06-15T00:00:00Z\"}\n" +
-            "  }) {\n" +
-            "    firstName\n" +
-            "    lastName\n" +
-            "  }\n" +
-            "}";
-
 }
